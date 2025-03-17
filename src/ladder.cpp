@@ -169,58 +169,114 @@ vector<string> generate_word_ladder(const string& begin_word, const string& end_
     */
 
 
-    // If the start word and end word are the same, return immediately
+    // // If the start word and end word are the same, return immediately
+    // if (begin_word == end_word) {
+    //     return {begin_word};
+    // }
+
+    // queue<vector<string>> ladder_queue;
+    // set<string> visited;
+
+    // // Start BFS with the begin_word as the first ladder
+    // ladder_queue.push({begin_word});
+    // visited.insert(begin_word);
+
+    // while (!ladder_queue.empty()) {
+    //     // Process each level separately
+    //     int level_size = ladder_queue.size();  
+
+    //     // Words visited in the current level
+    //     set<string> this_level_visited; 
+
+    //     // Process all ladders in the current BFS level
+    //     for (int i = 0; i < level_size; i++) {
+
+    //         // Retrieve the front ladder from the queue (FIFO order)
+    //         vector<string> current_ladder = ladder_queue.front();
+    //         ladder_queue.pop();
+    //         string last_word = current_ladder.back();
+
+    //         // Try all possible word transformations
+    //         for (const string &word : word_list) {
+    //             if (is_adjacent(last_word, word) && visited.find(word) == visited.end()) {
+    //                 vector<string> new_ladder = current_ladder;
+    //                 new_ladder.push_back(word);
+
+    //                 if (word == end_word) {
+    //                     // Found the shortest path
+    //                     return new_ladder;  
+    //                 }
+
+    //                 ladder_queue.push(new_ladder);
+    //                  // Mark word as visited for this level
+    //                 this_level_visited.insert(word); 
+    //             }
+    //         }
+    //     }
+
+    //     // Add words to the visited set after processing a level
+    //     for (const string &word : this_level_visited) {
+    //         visited.insert(word);
+    //     }
+    // }
+
+    // return {}; 
+
+    // If the starting and ending words are the same, return a ladder with just that word.
     if (begin_word == end_word) {
         return {begin_word};
     }
 
     queue<vector<string>> ladder_queue;
     set<string> visited;
-
-    // Start BFS with the begin_word as the first ladder
+    
+    // Start BFS by pushing the initial ladder (containing only the begin_word) onto the queue.
     ladder_queue.push({begin_word});
     visited.insert(begin_word);
 
+    // Continue processing until there are no more ladders to expand.
     while (!ladder_queue.empty()) {
-        // Process each level separately
-        int level_size = ladder_queue.size();  
+        // Determine the number of ladders in the current BFS level.
+        int level_size = ladder_queue.size();
+        set<string> this_level_visited;
 
-        // Words visited in the current level
-        set<string> this_level_visited; 
-
-        // Process all ladders in the current BFS level
+        // Process each ladder in the current level.
         for (int i = 0; i < level_size; i++) {
-            
-            // Retrieve the front ladder from the queue (FIFO order)
+            // Retrieve the next ladder (a vector of words) from the front of the queue.
             vector<string> current_ladder = ladder_queue.front();
             ladder_queue.pop();
             string last_word = current_ladder.back();
 
-            // Try all possible word transformations
+            // Iterate over every word in the dictionary.
             for (const string &word : word_list) {
+
+                // Check if the current dictionary word is adjacent (i.e. one edit away) from the last word
                 if (is_adjacent(last_word, word) && visited.find(word) == visited.end()) {
+                    // Create a new ladder by appending the adjacent word to the current ladder.
                     vector<string> new_ladder = current_ladder;
                     new_ladder.push_back(word);
 
+                    // If the adjacent word is the end word, we've found the shortest ladder.
                     if (word == end_word) {
-                        // Found the shortest path
-                        return new_ladder;  
+                        return new_ladder;
                     }
 
+                    // Otherwise, enqueue the new ladder for further expansion.
                     ladder_queue.push(new_ladder);
-                     // Mark word as visited for this level
-                    this_level_visited.insert(word); 
+                    
+                    // Record that this word was visited in the current level.
+                    this_level_visited.insert(word);
                 }
             }
         }
 
-        // Add words to the visited set after processing a level
+        // After processing the entire level, add all words found in this level to the visited set.
         for (const string &word : this_level_visited) {
             visited.insert(word);
         }
     }
 
-    return {}; 
+    return {};  
 }
 
 void load_words(set<string> & word_list, const string& file_name) {
@@ -274,6 +330,7 @@ void print_word_ladder(const vector<string>& ladder) {
     }
 
     // Print each word in the ladder separated by an arrow.
+    std::cout << "Word ladder found: ";
     for (size_t i = 0; i < ladder.size(); i++){
         std::cout << ladder[i] << " ";
     }
