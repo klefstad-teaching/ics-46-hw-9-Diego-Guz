@@ -168,15 +168,15 @@ vector<string> generate_word_ladder(const string& begin_word, const string& end_
         vector<string>: A vector representing the word ladder. Returns an empty vector if no ladder is found.
     */
 
+    if (begin_word == end_word) {
+        return {begin_word};
+    }
+    
     queue<vector<string>> ladder_queue;
     set<string> visited;
     ladder_queue.push({begin_word});
     visited.insert(begin_word);  
 
-    if (begin_word == end_word) {
-        return {begin_word};
-    }
-    
     while (!ladder_queue.empty()) {
         // Take the front ladder from the queue
         vector<string> current_ladder = ladder_queue.front();
