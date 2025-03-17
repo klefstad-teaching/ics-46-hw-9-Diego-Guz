@@ -55,7 +55,7 @@ bool edit_distance_within(const std::string& str1, const std::string& str2, int 
 
         // If both strings are identical, then the edit distance is 0.
         if(str1 == str2){
-            return false;
+            return true;
         } 
 
         // If the strings have the same length, then check if exactly one character differs.
@@ -168,50 +168,59 @@ vector<string> generate_word_ladder(const string& begin_word, const string& end_
         vector<string>: A vector representing the word ladder. Returns an empty vector if no ladder is found.
     */
 
-    // A queue to hold the ladders in progress.
-    queue<vector<std::string>> ladder_queue;
-    set<std::string> visited;  
 
-    // Start with the initial ladder containing only the begin_word.
-    vector<std::string> ladder;
-    ladder.push_back(begin_word);
-    ladder_queue.push(ladder);
+    // If the start word and end word are the same, return immediately
+    if (begin_word == end_word) {
+        return {begin_word};
+    }
+
+    queue<vector<string>> ladder_queue;
+    set<string> visited;
+
+    // Start BFS with the begin_word as the first ladder
+    ladder_queue.push({begin_word});
     visited.insert(begin_word);
 
-    // Continue until there are no more ladders to explore.
     while (!ladder_queue.empty()) {
+        // Process each level separately
+        int level_size = ladder_queue.size();  
 
-        // Get the current ladder from the queue.
-        vector<std::string> current_ladder = ladder_queue.front();
-        ladder_queue.pop();
+        // Words visited in the current level
+        set<string> this_level_visited; 
 
-        // Get the last word in the current ladder.
-        std::string last_word = current_ladder.back();
+        // Process all ladders in the current BFS level
+        for (int i = 0; i < level_size; i++) {
+            
+            // Retrieve the front ladder from the queue (FIFO order)
+            vector<string> current_ladder = ladder_queue.front();
+            ladder_queue.pop();
+            string last_word = current_ladder.back();
 
-        // Check each word in the dictionary.
-        for (const auto &word : word_list) {
+            // Try all possible word transformations
+            for (const string &word : word_list) {
+                if (is_adjacent(last_word, word) && visited.find(word) == visited.end()) {
+                    vector<string> new_ladder = current_ladder;
+                    new_ladder.push_back(word);
 
-            // Skip if the word has already been used in another ladder.
-            if (visited.find(word) != visited.end()){
-                continue;
-            }
+                    if (word == end_word) {
+                        // Found the shortest path
+                        return new_ladder;  
+                    }
 
-            // Check if the current dictionary word is adjacent to the last word.
-            if (is_adjacent(last_word, word)) {
-                vector<std::string> new_ladder = current_ladder;
-                new_ladder.push_back(word);
-                visited.insert(word);
-
-                // If we've reached the end word, return the ladder.
-                if (word == end_word){
-                    return new_ladder;
+                    ladder_queue.push(new_ladder);
+                     // Mark word as visited for this level
+                    this_level_visited.insert(word); 
                 }
-                ladder_queue.push(new_ladder);
             }
+        }
+
+        // Add words to the visited set after processing a level
+        for (const string &word : this_level_visited) {
+            visited.insert(word);
         }
     }
 
-    return vector<std::string>();
+    return {}; 
 }
 
 void load_words(set<string> & word_list, const string& file_name) {
@@ -266,9 +275,7 @@ void print_word_ladder(const vector<string>& ladder) {
 
     // Print each word in the ladder separated by an arrow.
     for (size_t i = 0; i < ladder.size(); i++){
-        cout << ladder[i];
-        if (i != ladder.size()-1)
-            std::cout << " -> ";
+        std::cout << ladder[i] << " ";
     }
 
     std::cout << endl;
