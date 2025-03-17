@@ -64,7 +64,7 @@ vector<int> dijkstra_shortest_path(const Graph& G, int source, vector<int>& prev
     std::vector<bool> visited(n, false);
     previous.assign(n, -1);
 
-     // Priority queue to select the vertex with the smallest tentative distance.
+    // Priority queue to select the vertex with the smallest tentative distance.
     priority_queue<Node, std::vector<Node>, NodeComparator> pq;
     distances[source] = 0;
     pq.push(Node(source, 0));
@@ -81,6 +81,7 @@ vector<int> dijkstra_shortest_path(const Graph& G, int source, vector<int>& prev
         if(visited[u]){
             continue;
         }
+
         visited[u] = true;
 
         // Loop over all the edges from vertex u.
@@ -159,6 +160,7 @@ void print_path(const vector<int>& path, int total) {
     for (size_t i = 0; i < path.size(); i++){
         std::cout << path[i] << " ";
     }
+
     std::cout << "" << std::endl;
     std::cout << "Total cost is " << total << std::endl;
 }

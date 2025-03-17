@@ -29,12 +29,12 @@ int main(){
     std::cout << "Enter end word: ";
     std::cin >> end;
     
-    // Convert start word to lowercase.
+    // Convert the start word to lowercase.
     for(auto & c : start){
          c = tolower(c);
     }
 
-    // Convert end word to lowercase.
+    // Convert the end word to lowercase.
     for(auto & c : end) {
         c = tolower(c);
     }

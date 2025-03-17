@@ -20,8 +20,7 @@ int main(int argc, char* argv[]){
 
     std::string filename;
 
-    // If a filename is provided as a command-line argument, use it.
-    // Otherwise, prompt the user to enter the filename.
+    // If a filename is provided as a command-line argument, use it. Otherwise, prompt the user to enter the filename.
     if(argc >= 2){
         filename = argv[1];
     } else {
@@ -31,11 +30,11 @@ int main(int argc, char* argv[]){
     
     Graph G;
 
-    // Attempt to load the graph from the specified file.
-    // If an error occurs (e.g., file not found), catch the exception and exit.
+    // Attempt to load the graph from the specified file. If an error occurs (e.g., file not found), catch the exception and exit.
     try {
         file_to_graph(filename, G);
-    } catch(const exception& e) {
+    } 
+    catch(const exception& e) {
         std::cerr << "Error: " << e.what() << std::endl;
         return 1;
     }
@@ -53,9 +52,11 @@ int main(int argc, char* argv[]){
         // Check if a path exists.
         if(path.empty()){
             std::cout << "No path found." << std::endl;
-        } else {
+        } 
+        else {
             print_path(path, distances[v]);
         }
     }
+    
     return 0;
 }

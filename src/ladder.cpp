@@ -46,7 +46,6 @@ bool edit_distance_within(const std::string& str1, const std::string& str2, int 
     }
     
     // Get the lengths of both strings.
-
     int m = str1.size();
     int n = str2.size();
     
@@ -129,10 +128,12 @@ bool edit_distance_within(const std::string& str1, const std::string& str2, int 
         for (int j = 1; j <= n; j++) {
 
             // If the characters at the current positions are the same (ignoring case), no new edit is needed.
-            if (tolower(str1[i - 1]) == tolower(str2[j - 1]))
+            if (tolower(str1[i - 1]) == tolower(str2[j - 1])){
                 dp[i][j] = dp[i - 1][j - 1];
-            else
+            }
+            else{
                 dp[i][j] = min({dp[i - 1][j - 1], dp[i - 1][j], dp[i][j - 1]}) + 1;
+            }
         }
     }
 
@@ -208,6 +209,7 @@ vector<string> generate_word_ladder(const string& begin_word, const string& end_
                 if (word == end_word) {
                     return new_ladder;
                 }
+
                 ladder_queue.push(new_ladder);
             }
         }
@@ -235,6 +237,7 @@ void load_words(set<string> & word_list, const string& file_name) {
         std::cerr << "Cannot open " << file_name << std::endl;
         return;
     }
+    
     std::string word;
 
     // Read each word from the file.
@@ -242,6 +245,7 @@ void load_words(set<string> & word_list, const string& file_name) {
         for (auto & c : word) {
             c = tolower(c);
         }
+
         word_list.insert(word);
     }
 
