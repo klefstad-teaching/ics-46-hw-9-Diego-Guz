@@ -222,61 +222,46 @@ vector<string> generate_word_ladder(const string& begin_word, const string& end_
 
     // return {}; 
 
-    // If the starting and ending words are the same, return a ladder with just that word.
-    if (begin_word == end_word) {
-        return {begin_word};
-    }
-
     queue<vector<string>> ladder_queue;
     set<string> visited;
-    
-    // Start BFS by pushing the initial ladder (containing only the begin_word) onto the queue.
     ladder_queue.push({begin_word});
-    visited.insert(begin_word);
+    visited.insert(begin_word);  
 
-    // Continue processing until there are no more ladders to expand.
     while (!ladder_queue.empty()) {
-        // Determine the number of ladders in the current BFS level.
-        int level_size = ladder_queue.size();
-        set<string> this_level_visited;
+        // Take the front ladder from the queue
+        vector<string> current_ladder = ladder_queue.front();
+        ladder_queue.pop();
 
-        // Process each ladder in the current level.
-        for (int i = 0; i < level_size; i++) {
-            // Retrieve the next ladder (a vector of words) from the front of the queue.
-            vector<string> current_ladder = ladder_queue.front();
-            ladder_queue.pop();
-            string last_word = current_ladder.back();
+        // The last word in this ladder
+        string last_word = current_ladder.back();
 
-            // Iterate over every word in the dictionary.
-            for (const string &word : word_list) {
-
-                // Check if the current dictionary word is adjacent (i.e. one edit away) from the last word
-                if (is_adjacent(last_word, word) && visited.find(word) == visited.end()) {
-                    // Create a new ladder by appending the adjacent word to the current ladder.
-                    vector<string> new_ladder = current_ladder;
-                    new_ladder.push_back(word);
-
-                    // If the adjacent word is the end word, we've found the shortest ladder.
-                    if (word == end_word) {
-                        return new_ladder;
-                    }
-
-                    // Otherwise, enqueue the new ladder for further expansion.
-                    ladder_queue.push(new_ladder);
-                    
-                    // Record that this word was visited in the current level.
-                    this_level_visited.insert(word);
-                }
-            }
+        // If we've reached end_word, return the ladder immediately
+        if (last_word == end_word) {
+            return current_ladder;
         }
 
-        // After processing the entire level, add all words found in this level to the visited set.
-        for (const string &word : this_level_visited) {
-            visited.insert(word);
+        // Try to expand the ladder by adding valid neighbors
+        for (const auto &word : word_list) {
+
+            // If last_word and word are adjacent and word hasn't been visited yet:
+            if (is_adjacent(last_word, word) && visited.find(word) == visited.end()) {
+                /
+                vector<string> new_ladder = current_ladder;
+                new_ladder.push_back(word);
+
+                // Mark this word as visited, so we don't reuse it in another path
+                visited.insert(word);
+
+                // If it's the end_word, return the new ladder right away
+                if (word == end_word) {
+                    return new_ladder;
+                }
+                ladder_queue.push(new_ladder);
+            }
         }
     }
 
-    return {};  
+    return {}; 
 }
 
 void load_words(set<string> & word_list, const string& file_name) {
