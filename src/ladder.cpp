@@ -168,65 +168,15 @@ vector<string> generate_word_ladder(const string& begin_word, const string& end_
         vector<string>: A vector representing the word ladder. Returns an empty vector if no ladder is found.
     */
 
-
-    // // If the start word and end word are the same, return immediately
-    // if (begin_word == end_word) {
-    //     return {begin_word};
-    // }
-
-    // queue<vector<string>> ladder_queue;
-    // set<string> visited;
-
-    // // Start BFS with the begin_word as the first ladder
-    // ladder_queue.push({begin_word});
-    // visited.insert(begin_word);
-
-    // while (!ladder_queue.empty()) {
-    //     // Process each level separately
-    //     int level_size = ladder_queue.size();  
-
-    //     // Words visited in the current level
-    //     set<string> this_level_visited; 
-
-    //     // Process all ladders in the current BFS level
-    //     for (int i = 0; i < level_size; i++) {
-
-    //         // Retrieve the front ladder from the queue (FIFO order)
-    //         vector<string> current_ladder = ladder_queue.front();
-    //         ladder_queue.pop();
-    //         string last_word = current_ladder.back();
-
-    //         // Try all possible word transformations
-    //         for (const string &word : word_list) {
-    //             if (is_adjacent(last_word, word) && visited.find(word) == visited.end()) {
-    //                 vector<string> new_ladder = current_ladder;
-    //                 new_ladder.push_back(word);
-
-    //                 if (word == end_word) {
-    //                     // Found the shortest path
-    //                     return new_ladder;  
-    //                 }
-
-    //                 ladder_queue.push(new_ladder);
-    //                  // Mark word as visited for this level
-    //                 this_level_visited.insert(word); 
-    //             }
-    //         }
-    //     }
-
-    //     // Add words to the visited set after processing a level
-    //     for (const string &word : this_level_visited) {
-    //         visited.insert(word);
-    //     }
-    // }
-
-    // return {}; 
-
     queue<vector<string>> ladder_queue;
     set<string> visited;
     ladder_queue.push({begin_word});
     visited.insert(begin_word);  
 
+    if (begin_word == end_word) {
+        return {begin_word};
+    }
+    
     while (!ladder_queue.empty()) {
         // Take the front ladder from the queue
         vector<string> current_ladder = ladder_queue.front();
