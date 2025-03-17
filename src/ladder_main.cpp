@@ -29,13 +29,6 @@ int main(){
     std::cout << "Enter end word: ";
     std::cin >> end;
     
-    // Check if the start and end words are the same.
-    // If they are the same, display an error and exit.
-    if(start == end) {
-        error(start, end, "Start and end words must be different.");
-        return 1;
-    }
-    
     // Convert start word to lowercase.
     for(auto & c : start){
          c = tolower(c);
