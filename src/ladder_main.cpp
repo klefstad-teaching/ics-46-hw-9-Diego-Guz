@@ -51,7 +51,7 @@ int main(){
     vector<std::string> ladder = generate_word_ladder(start, end, word_list);
     print_word_ladder(ladder);
     
-    // verify_word_ladder();
+    verify_word_ladder();
     
     return 0;
 }

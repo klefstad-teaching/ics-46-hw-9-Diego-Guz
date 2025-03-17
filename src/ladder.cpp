@@ -169,9 +169,11 @@ vector<string> generate_word_ladder(const string& begin_word, const string& end_
     */
 
     if (begin_word == end_word) {
-        return {begin_word};
+        vector<string> ladder;
+        ladder.push_back(begin_word);
+        return ladder;
     }
-    
+
     queue<vector<string>> ladder_queue;
     set<string> visited;
     ladder_queue.push({begin_word});
@@ -211,7 +213,7 @@ vector<string> generate_word_ladder(const string& begin_word, const string& end_
         }
     }
 
-    return {}; 
+    return vector<string>(); 
 }
 
 void load_words(set<string> & word_list, const string& file_name) {
@@ -293,5 +295,6 @@ void verify_word_ladder() {
     my_assert(generate_word_ladder("work", "play", word_list).size() == 6);
     my_assert(generate_word_ladder("sleep", "awake", word_list).size() == 8);
     my_assert(generate_word_ladder("car", "cheat", word_list).size() == 4);
+    my_assert(generate_word_ladder("were", "were", word_list).size() == 1);
     #undef my_assert
 }
