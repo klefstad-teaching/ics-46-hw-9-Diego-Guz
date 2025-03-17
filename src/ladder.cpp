@@ -245,7 +245,7 @@ vector<string> generate_word_ladder(const string& begin_word, const string& end_
 
             // If last_word and word are adjacent and word hasn't been visited yet:
             if (is_adjacent(last_word, word) && visited.find(word) == visited.end()) {
-                /
+                
                 vector<string> new_ladder = current_ladder;
                 new_ladder.push_back(word);
 
