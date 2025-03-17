@@ -150,11 +150,10 @@ void print_path(const vector<int>& path, int total) {
         None.
     */
 
-    // Check if the path is empty.
-    if(path.empty()){
+    if (total == INF) {
         std::cout << "No path found." << std::endl;
         return;
-    }
+    } 
     
     // Loop through the path and print each vertex.
     for (size_t i = 0; i < path.size(); i++){
